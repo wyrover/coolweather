@@ -4,9 +4,11 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 public class CoolWeatherOpenHelper extends SQLiteOpenHelper {
 
+	private Context mcontext=null;
 	public static final String CREATE_PROVINCE ="create table Province ("
 			+ "id integer primary key autoincrement,"
 			+ "province_name text,"
@@ -16,7 +18,7 @@ public class CoolWeatherOpenHelper extends SQLiteOpenHelper {
 			+ "city_name text,"
 			+ "city_code text,"
 			+ "province_id integer)";
-	public static final String CREATE_COUNTY ="create county City ("
+	public static final String CREATE_COUNTY ="create table County ("
 			+ "id integer primary key autoincrement,"
 			+ "county_name text,"
 			+ "county_code text,"
@@ -24,6 +26,7 @@ public class CoolWeatherOpenHelper extends SQLiteOpenHelper {
 	public CoolWeatherOpenHelper(Context context, String name,
 			CursorFactory factory, int version) {
 		super(context, name, factory, version);
+		mcontext=context;
 	}
 
 	@Override

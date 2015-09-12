@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	 <area id="BJ" name="北京" en="Beijing">
+     </area>
+     <area id="SH" name="上海" en="Shanghai">
+     </area>
+     <area id="TJ" name="天津" en="Tianjin">
+         
+     </area>
+     <area id="CQ" name="重庆" en="Chongqing">
+         
+     </area>
+     <area id="HK" name="香港" en="Hong Kong">
+        
+     </area>
+     <area id="MO" name="澳门" en="Macao">
+         
+     </area>
+	<area id="TW" name="台湾" en="Taiwan">
+     
+ </area>
+ <area id="HL" name="黑龙江" en="Heilongjiang">
+     
+ </area>
+ <area id="JL" name="吉林" en="Jilin">
+     
+ </area>
+ <area id="LN" name="辽宁" en="Liaoning">
+     
+ </area>
+ <area id="NM" name="内蒙古" en="Neimenggu">
+ </area>
+ <area id="HE" name="河北" en="Hebei">
+    
+ </area>
+ <area id="HA" name="河南" en="Hena">
+     
+ </area>
+ <area id="SX" name="山西" en="Shanxi">
+ </area>
+ <area id="SD" name="山东" en="Shandong">
+     
+ </area>
+ <area id="JS" name="江苏" en="Jiangsu">
+     
+ </area>
+ <area id="ZJ" name="浙江" en="Zhejiang">
+     
+ </area>
+ <area id="FJ" name="福建" en="Fujian">
+    
+ </area>
+ <area id="JX" name="江西" en="Jiangxi">
+     
+ </area>
+ <area id="AH" name="安徽" en="Anhui">
+    
+ </area>
+ <area id="HB" name="湖北" en="Hubei">
+    
+ </area>
+ <area id="HN" name="湖南" en="Huna">
+   
+ </area>
+ <area id="GD" name="广东" en="Guangdong">
+     
+ </area>
+ <area id="GX" name="广西" en="Guangxi">
+     
+ </area>
+ <area id="HI" name="海南" en="Haina">
+     
+ </area>
+ <area id="GZ" name="贵州" en="Guizhou">
+     
+ </area>
+ <area id="YN" name="云南" en="Yunna">
+    
+ </area>
+ <area id="SC" name="四川" en="Sichuan">
+     
+ </area>
+ <area id="XZ" name="西藏" en="Xizang">
+     
+ </area>
+ <area id="SN" name="陕西" en="Shanxi">
+     
+ </area>
+ <area id="NX" name="宁夏" en="Ningxia">
+    
+ </area>
+ <area id="GS" name="甘肃" en="Gansu">
+    
+ </area>
+ <area id="QH" name="青海" en="Qinghai">
+    
+ </area>
+ <area id="XJ" name="新疆" en="Xinjiang">
+    
+ </area>
+</root>

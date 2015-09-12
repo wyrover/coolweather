@@ -1,6 +1,6 @@
 package com.example.coolweather.model;
 
-public class County {
+public class County extends Model{
 	private int id;
 	private String CountyName;
 	private String CountyCode;

@@ -1,6 +1,6 @@
 package com.example.coolweather.model;
 
-public class City {
+public class City extends Model {
 	private int id;
 	private String cityName;
 	private String cityCode;

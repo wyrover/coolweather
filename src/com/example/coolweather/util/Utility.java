@@ -79,47 +79,56 @@ public class Utility {
 //		return isover;
 //	}
 	
+	
 	public static String toJson(String jsonStr){
     	
     	return jsonStr.substring(jsonStr.lastIndexOf("(")+1, jsonStr.lastIndexOf(")"));
     }
 	
-	public static boolean addModel(Context context,CoolWeatherDB coolWeatherDB,String type){
+//	public static void addModel(CoolWeatherDB coolWeatherDB,String jsonStr){
+//		JSONArray array = new JSONArray(jsonStr);			
+//		for (int i = 0; i < array.length(); i++) {
+//			
+//			JSONArray ja=array.getJSONArray(i);
+//			
+//			if("province".equals(type)){
+//				Province province= new Province();
+//				province.setprovinceCode(ja.getString(1));
+//				province.setprovinceName(ja.getString(0));
+//				coolWeatherDB.savePcovince(province);
+//			}
+//			else if("city".equals(type)){
+//				City city = new City();
+//				city.setcityCode(ja.getString(1));
+//				city.setcityName(ja.getString(0));
+//				coolWeatherDB.saveCity(city);
+//			}
+//			else if("county".equals(type)){
+//				County county = new County();
+//				county.setCountyCode(ja.getString(1));
+//				county.setCountyName(ja.getString(0));
+//				coolWeatherDB.saveCounty(county);
+//			}
+//	}
+	
+	public synchronized static boolean handleProvincesResponse(CoolWeatherDB coolWeatherDB,
+			String jsonStr){
 		
 		boolean isover=false;
-		String jsonStr="";
-		if (type.equals("province")) {
-			jsonStr=geFileFromAssets(context, "citylist.txt");
-		}
 		if (TextUtils.isEmpty(jsonStr))
 			return isover;
 		jsonStr=toJson(jsonStr);
 		try{
-			JSONArray array = new JSONArray(jsonStr);
-			
+
+			JSONArray array = new JSONArray(jsonStr);			
 			for (int i = 0; i < array.length(); i++) {
 				
 				JSONArray ja=array.getJSONArray(i);
 				
-				if("province".equals(type)){
-					Province province= new Province();
-					province.setprovinceCode(ja.getString(1));
-					province.setprovinceName(ja.getString(0));
-					coolWeatherDB.savePcovince(province);
-				}
-				else if("city".equals(type)){
-					City city = new City();
-					city.setcityCode(ja.getString(1));
-					city.setcityName(ja.getString(0));
-					coolWeatherDB.saveCity(city);
-				}
-				else if("county".equals(type)){
-					County county = new County();
-					county.setCountyCode(ja.getString(1));
-					county.setCountyName(ja.getString(0));
-					coolWeatherDB.saveCounty(county);
-				}
-				
+				Province province= new Province();
+				province.setprovinceCode(ja.getString(1));
+				province.setprovinceName(ja.getString(0));
+				coolWeatherDB.savePcovince(province);	
 			}
 			isover=true;
 		}catch(Exception e){
@@ -128,24 +137,78 @@ public class Utility {
 		}
 		return isover;
 	}
-	public static String geFileFromAssets(Context context, String fileName) { 
-	    	
-		if (context == null || TextUtils.isEmpty(fileName)) {
-	            return null;
-	        }
-	
-	        StringBuilder s = new StringBuilder("");
-	        try {
-	            InputStreamReader in = new InputStreamReader(context.getResources().getAssets().open(fileName));
-	            BufferedReader br = new BufferedReader(in);
-	            String line;
-	            while ((line = br.readLine()) != null) {
-	                s.append(line);
-	            }
-	            return s.toString();
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	            return null;
-	        }
+	public synchronized static boolean handleCitiesResponse(CoolWeatherDB coolWeatherDB,
+			String jsonStr,int provinceId){
+		
+		boolean isover=false;
+		if (TextUtils.isEmpty(jsonStr))
+			return isover;
+		jsonStr=toJson(jsonStr);
+		try{
+
+			JSONArray array = new JSONArray(jsonStr);			
+			for (int i = 0; i < array.length(); i++) {
+				
+				JSONArray ja=array.getJSONArray(i);				
+				City city = new City();
+				city.setcityCode(ja.getString(1));
+				city.setcityName(ja.getString(0));
+				city.setprovinceId(provinceId);
+				coolWeatherDB.saveCity(city);
+			}
+			isover=true;
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return isover;
 	}
+	
+	public synchronized static boolean handleCountiesResponse(CoolWeatherDB coolWeatherDB,
+			String jsonStr,int cityId){
+		
+		boolean isover=false;
+		if (TextUtils.isEmpty(jsonStr))
+			return isover;
+		jsonStr=toJson(jsonStr);
+		try{
+
+			JSONArray array = new JSONArray(jsonStr);			
+			for (int i = 0; i < array.length(); i++) {
+				
+				JSONArray ja=array.getJSONArray(i);				
+				County county = new County();
+				county.setCountyCode(ja.getString(1));
+				county.setCountyName(ja.getString(0));
+				county.setcityId(cityId);
+				coolWeatherDB.saveCounty(county);
+			}
+			isover=true;
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return isover;
+	}
+	
+//	public static String geFileFromAssets(Context context, String fileName) { 
+//	    	
+//		if (context == null || TextUtils.isEmpty(fileName)) {
+//	            return null;
+//	        }
+//	
+//	        StringBuilder s = new StringBuilder("");
+//	        try {
+//	            InputStreamReader in = new InputStreamReader(context.getResources().getAssets().open(fileName));
+//	            BufferedReader br = new BufferedReader(in);
+//	            String line;
+//	            while ((line = br.readLine()) != null) {
+//	                s.append(line);
+//	            }
+//	            return s.toString();
+//	        } catch (IOException e) {
+//	            e.printStackTrace();
+//	            return null;
+//	        }
+//	}
 }

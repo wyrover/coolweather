@@ -63,11 +63,11 @@ public class ChooseAreaActivity extends Activity{
 					int position, long id) {
 				if(currentLevel==LEVEL_PROVINCE){
 					selectedProvince=provinceList.get(position);
-//					queryCities();
+					queryCities();
 				}
 				else if(currentLevel==LEVEL_CITY){
 					selectedCity=cityList.get(position);
-//					queryCounties();
+					queryCounties();
 				}
 			}		
 		});
@@ -96,40 +96,40 @@ public class ChooseAreaActivity extends Activity{
 	/**
 	 * 查询选中省内所有的市，优先从数据库查询，如果没有查询到再去服务器上查询。
 	 */
-//	private void queryCities() {
-//		cityList = coolWeatherDB.loadCities(selectedProvince.getId());
-//		if (cityList.size() > 0) {
-//			dataList.clear();
-//			for (City city : cityList) {
-//				dataList.add(city.getcityName());
-//			}
-//			adapter.notifyDataSetChanged();
-//			listView.setSelection(0);
-//			titleText.setText(selectedProvince.getprovinceName());
-//			currentLevel = LEVEL_CITY;
-//		} else {
-//			queryFromServer(selectedProvince.getprovinceCode(), "city");
-//		}
-//	}
-//	
+	private void queryCities() {
+		cityList = coolWeatherDB.loadCities(selectedProvince.getId());
+		if (cityList.size() > 0) {
+			dataList.clear();
+			for (City city : cityList) {
+				dataList.add(city.getcityName());
+			}
+			adapter.notifyDataSetChanged();
+			listView.setSelection(0);
+			titleText.setText(selectedProvince.getprovinceName());
+			currentLevel = LEVEL_CITY;
+		} else {
+			queryFromServer(selectedProvince.getprovinceCode(), "city");
+		}
+	}
+	
 	/**
 	 * 查询选中市内所有的县，优先从数据库查询，如果没有查询到再去服务器上查询。
 	 */
-//	private void queryCounties() {
-//		countyList = coolWeatherDB.loadCounties(selectedCity.getId());
-//		if (countyList.size() > 0) {
-//			dataList.clear();
-//			for (County county : countyList) {
-//				dataList.add(county.getCountyName());
-//			}
-//			adapter.notifyDataSetChanged();
-//			listView.setSelection(0);
-//			titleText.setText(selectedCity.getcityName());
-//			currentLevel = LEVEL_COUNTY;
-//		} else {
-//			queryFromServer(selectedCity.getcityCode(), "county");
-//		}
-//	}
+	private void queryCounties() {
+		countyList = coolWeatherDB.loadCounties(selectedCity.getId());
+		if (countyList.size() > 0) {
+			dataList.clear();
+			for (County county : countyList) {
+				dataList.add(county.getCountyName());
+			}
+			adapter.notifyDataSetChanged();
+			listView.setSelection(0);
+			titleText.setText(selectedCity.getcityName());
+			currentLevel = LEVEL_COUNTY;
+		} else {
+			queryFromServer(selectedCity.getcityCode(), "county");
+		}
+	}
 	
 	/**
 	 * 根据传入的代号和类型从服务器上查询省市县数据。
@@ -137,25 +137,28 @@ public class ChooseAreaActivity extends Activity{
 	private void queryFromServer(final String code, final String type) {
 		String address;
 		if (!TextUtils.isEmpty(code)) {
-			address = "http://www.weather.com.cn/data/list3/city" + code + ".xml";
+			if("city".equals(type))
+				address = "http://cdn.weather.hao.360.cn/sed_api_area_query.php?grade=city&_jsonp=loadCity&code=" + code;
+			else
+				address = "http://cdn.weather.hao.360.cn/sed_api_area_query.php?grade=town&_jsonp=loadTown&code=" + code;
 		} else {
-			address = "http://www.weather.com.cn/data/list3/city.xml";
+			address = "http://cdn.weather.hao.360.cn/sed_api_area_query.php?grade=province&_jsonp=loadProvince";
 		}
 		showProgressDialog();
-		HttpUtil.sendHttpRequest(this,address,new HttpCallbackListener() {
+		HttpUtil.sendHttpRequest(address,new HttpCallbackListener() {
 			@Override
 			public void onFinsh(String response) {
 				boolean result = false;
 				if ("province".equals(type)) {
-					result = Utility.addModel(ChooseAreaActivity.this,coolWeatherDB,type);
+					result = Utility.handleProvincesResponse(coolWeatherDB,response);
 				}
-//				else if ("city".equals(type)) {
-//					result = Utility.handleCitiesResponse(coolWeatherDB,
-//							response, selectedProvince.getId());
-//				} else if ("county".equals(type)) {
-//					result = Utility.handleCountiesResponse(coolWeatherDB,
-//							response, selectedCity.getId());
-//				}
+				else if ("city".equals(type)) {
+					result = Utility.handleCitiesResponse(coolWeatherDB,
+							response, selectedProvince.getId());
+				} else if ("county".equals(type)) {
+					result = Utility.handleCountiesResponse(coolWeatherDB,
+							response, selectedCity.getId());
+				}
 				if (result) {
 					// 通过runOnUiThread()方法回到主线程处理逻辑
 					runOnUiThread(new Runnable() {
@@ -164,10 +167,10 @@ public class ChooseAreaActivity extends Activity{
 							closeProgressDialog();
 							if ("province".equals(type)) {
 								queryProvinces();
-////							} else if ("city".equals(type)) {
-////								queryCities();
-////							} else if ("county".equals(type)) {
-////								queryCounties();
+							} else if ("city".equals(type)) {
+								queryCities();
+							} else if ("county".equals(type)) {
+								queryCounties();
 							}
 						}
 					});
@@ -217,7 +220,7 @@ public class ChooseAreaActivity extends Activity{
 	@Override
 	public void onBackPressed() {
 		if (currentLevel == LEVEL_COUNTY) {
-//			queryCities();
+			queryCities();
 		} else if (currentLevel == LEVEL_CITY) {
 			queryProvinces();
 		} else {
